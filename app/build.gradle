@@ -81,6 +81,9 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxkotlin:2.3.0"
     implementation "io.reactivex.rxjava2:rxandroid:$rx_android_version"
 
+    // Easy permission
+    implementation 'pub.devrel:easypermissions:3.0.0'
+
     // https://github.com/orhanobut/logger
     implementation 'com.orhanobut:logger:2.2.0'
 
