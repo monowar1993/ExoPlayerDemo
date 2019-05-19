@@ -1,18 +1,35 @@
-package com.exoplayerdemo.android
+package com.exoplayerdemo.android.ui.main
 
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.Menu
 import android.view.MenuItem
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
+import com.exoplayerdemo.android.R
+import com.exoplayerdemo.android.core.activity.AppActivity
+import com.exoplayerdemo.android.databinding.ActivityMainBinding
 
 import kotlinx.android.synthetic.main.activity_main.*
+import javax.inject.Inject
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppActivity<MainViewModel, ActivityMainBinding>() {
+
+    @Inject
+    lateinit var factory: ViewModelProvider.Factory
+
+    override fun createViewModel(): MainViewModel = ViewModelProviders.of(getActivity(), factory).get(MainViewModel::class.java)
+
+    override fun setViewModel(binding: ActivityMainBinding, viewModel: MainViewModel) {
+        binding.viewModel = viewModel
+    }
+
+    override val layoutResourceId: Int
+        get() = R.layout.activity_main
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
         fab.setOnClickListener { view ->
