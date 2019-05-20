@@ -5,10 +5,12 @@ package com.exoplayerdemo.android.data.repository
  * Brain Station 23.
  */
 data class Video(
+        val id: Int = 0,
         val name: String = "",
-        val path: String = ""
+        val path: String = "",
+        val thumbnail: String = ""
 ) {
     override fun toString(): String {
-        return "Video(name='$name', path='$path')"
+        return "Video(id='$id', name='$name', path='$path', thumbnail='$thumbnail')"
     }
 }

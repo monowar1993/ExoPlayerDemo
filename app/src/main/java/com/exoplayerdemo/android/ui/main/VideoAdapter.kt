@@ -7,18 +7,20 @@ import android.view.ViewGroup
 import androidx.annotation.IntRange
 import androidx.recyclerview.widget.RecyclerView
 import com.exoplayerdemo.android.R
+import com.exoplayerdemo.android.core.GlideApp
 import com.exoplayerdemo.android.data.repository.Video
 import kotlinx.android.synthetic.main.item_video.view.*
 import org.jetbrains.anko.sdk27.coroutines.onClick
+import java.io.File
 
 /**
  * Created by Mostafa Monowar on 20-May-19
  * Brain Station 23.
  */
 class VideoAdapter(
-        private val context: Context,
-        private val list: MutableList<Video>,
-        private val onItemClick: (Int) -> Unit
+    private val context: Context,
+    private val list: MutableList<Video>,
+    private val onItemClick: (Int) -> Unit
 ) : RecyclerView.Adapter<VideoAdapter.VideoViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VideoViewHolder {
@@ -37,13 +39,20 @@ class VideoAdapter(
 
     inner class VideoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
+        val tvName = itemView.tvName
+        val ivThumbnail = itemView.ivThumbnail
+
         init {
             itemView.onClick { onItemClick(adapterPosition) }
         }
 
-        val tvName = itemView.tvName
-
         fun bind(item: Video) {
+            GlideApp.with(context)
+                .load(File(item.thumbnail))
+                .placeholder(R.drawable.img_placeholder)
+                .error(R.drawable.img_placeholder)
+                .into(ivThumbnail)
+
             tvName.text = item.name
         }
     }
