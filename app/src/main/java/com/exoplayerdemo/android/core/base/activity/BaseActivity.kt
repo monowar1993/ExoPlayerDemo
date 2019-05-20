@@ -1,4 +1,4 @@
-package com.exoplayerdemo.android.core.activity
+package com.exoplayerdemo.android.core.base.activity
 
 import android.app.AlertDialog
 import android.content.Context

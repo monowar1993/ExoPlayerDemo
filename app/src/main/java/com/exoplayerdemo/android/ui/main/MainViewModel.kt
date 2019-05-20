@@ -1,7 +1,7 @@
 package com.exoplayerdemo.android.ui.main
 
 import androidx.lifecycle.MutableLiveData
-import com.exoplayerdemo.android.core.viewmodel.AppViewModel
+import com.exoplayerdemo.android.core.base.viewmodel.AppViewModel
 import com.exoplayerdemo.android.data.repository.MediaRepository
 import com.exoplayerdemo.android.data.repository.Video
 import io.reactivex.android.schedulers.AndroidSchedulers

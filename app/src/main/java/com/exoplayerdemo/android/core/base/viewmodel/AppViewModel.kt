@@ -1,4 +1,4 @@
-package com.exoplayerdemo.android.core.viewmodel
+package com.exoplayerdemo.android.core.base.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.exoplayerdemo.android.core.SingleLiveEvent

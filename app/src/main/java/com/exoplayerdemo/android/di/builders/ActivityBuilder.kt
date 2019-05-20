@@ -1,6 +1,7 @@
 package com.exoplayerdemo.android.di.builders
 
 import com.exoplayerdemo.android.ui.main.MainActivity
+import com.exoplayerdemo.android.ui.videoplayer.VideoPlayerActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -25,4 +26,7 @@ abstract class ActivityBuilder {
 
     @ContributesAndroidInjector
     abstract fun bindMainActivity(): MainActivity
+
+    @ContributesAndroidInjector
+    abstract fun bindVideoPlayerActivity(): VideoPlayerActivity
 }

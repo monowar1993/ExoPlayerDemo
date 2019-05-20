@@ -3,8 +3,9 @@ package com.exoplayerdemo.android.di.modules
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.dignio.android.di.ViewModelKey
-import com.exoplayerdemo.android.core.viewmodel.AppViewModelFactory
+import com.exoplayerdemo.android.core.base.viewmodel.AppViewModelFactory
 import com.exoplayerdemo.android.ui.main.MainViewModel
+import com.exoplayerdemo.android.ui.videoplayer.VideoPlayerViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
@@ -30,4 +31,9 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(MainViewModel::class)
     abstract fun bindMainViewModel(viewModel: MainViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(VideoPlayerViewModel::class)
+    abstract fun bindVideoPlayerViewModel(viewModel: VideoPlayerViewModel): ViewModel
 }

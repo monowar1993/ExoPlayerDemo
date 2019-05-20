@@ -1,6 +1,7 @@
 package com.exoplayerdemo.android.ui.main
 
 import android.Manifest
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -9,8 +10,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.exoplayerdemo.android.R
-import com.exoplayerdemo.android.core.activity.AppActivity
+import com.exoplayerdemo.android.core.base.activity.AppActivity
 import com.exoplayerdemo.android.databinding.ActivityMainBinding
+import com.exoplayerdemo.android.ui.videoplayer.VideoPlayerActivity
 import com.exoplayerdemo.android.util.SpaceItemDecoration
 import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.activity_main.*
@@ -49,10 +51,14 @@ class MainActivity : AppActivity<MainViewModel, ActivityMainBinding>() {
 
         viewModel.videosLiveData.observe(getActivity(), Observer { videosList ->
             Logger.d(videosList.toString())
-            val adapter = VideoAdapter(getContext(), videosList.toMutableList()) {
-
-            }
+            val adapter = VideoAdapter(getContext(), videosList.toMutableList())
             recyclerView.adapter = adapter
+            adapter.setOnItemClickListener { position ->
+                val item = adapter.getItem(position)
+                startActivity(Intent(getActivity(), VideoPlayerActivity::class.java).apply {
+                    putExtra(VideoPlayerActivity.EXTRA_VIDEO_VIDEO_PATH, item.path)
+                })
+            }
         })
 
         viewModel.showLoader.observe(getActivity(), Observer {

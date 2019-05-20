@@ -14,6 +14,7 @@ buildscript {
         rx_android_version = '2.1.1'
         rx_extensions_version = '0.20.8'
         dagger_version = "2.22.1"
+        exo_player_version = "2.9.6"
         glide_version = "4.9.0"
     }
 

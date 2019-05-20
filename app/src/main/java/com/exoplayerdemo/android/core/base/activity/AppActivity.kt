@@ -1,8 +1,8 @@
-package com.exoplayerdemo.android.core.activity
+package com.exoplayerdemo.android.core.base.activity
 
 import android.os.Bundle
 import androidx.databinding.ViewDataBinding
-import com.exoplayerdemo.android.core.viewmodel.AppViewModel
+import com.exoplayerdemo.android.core.base.viewmodel.AppViewModel
 import kotlin.properties.Delegates
 
 /**

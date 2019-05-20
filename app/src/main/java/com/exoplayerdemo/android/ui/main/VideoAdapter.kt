@@ -19,9 +19,10 @@ import java.io.File
  */
 class VideoAdapter(
     private val context: Context,
-    private val list: MutableList<Video>,
-    private val onItemClick: (Int) -> Unit
+    private val list: MutableList<Video>
 ) : RecyclerView.Adapter<VideoAdapter.VideoViewHolder>() {
+
+    private lateinit var onItemClick: (Int) -> Unit
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VideoViewHolder {
         return VideoViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_video, parent, false))
@@ -36,6 +37,10 @@ class VideoAdapter(
     }
 
     fun getItem(@IntRange(from = 0) position: Int): Video = list[position]
+
+    fun setOnItemClickListener(onItemClick: (Int) -> Unit) {
+        this.onItemClick = onItemClick
+    }
 
     inner class VideoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
