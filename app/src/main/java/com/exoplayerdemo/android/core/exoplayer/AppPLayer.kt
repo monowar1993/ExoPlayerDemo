@@ -14,5 +14,7 @@ interface AppPLayer {
     fun playPause(play: Boolean)
     fun forward()
     fun rewind()
+    fun getCurrentPosition(): Long
+    fun getPlayWhenReady(): Boolean
     fun releasePlayer()
 }

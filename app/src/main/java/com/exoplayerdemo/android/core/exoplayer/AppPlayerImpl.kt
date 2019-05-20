@@ -57,11 +57,14 @@ class AppPlayerImpl : AppPLayer {
         }
     }
 
+    override fun getCurrentPosition(): Long = player?.currentPosition ?: 0
+
+    //fun getCurrentWindowIndex(): Int = player?.currentWindowIndex ?: 0
+
+    override fun getPlayWhenReady(): Boolean = player?.playWhenReady ?: false
+
     override fun releasePlayer() {
         if (player != null) {
-            //playbackPosition = player.getCurrentPosition()
-            //currentWindow = player.getCurrentWindowIndex()
-            //playWhenReady = player.getPlayWhenReady()
             player?.release()
             player = null
         }
