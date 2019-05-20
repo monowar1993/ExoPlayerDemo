@@ -2,17 +2,19 @@ package com.exoplayerdemo.android.ui.main
 
 import android.Manifest
 import android.os.Bundle
-import android.provider.MediaStore
 import android.view.Menu
 import android.view.MenuItem
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.exoplayerdemo.android.R
 import com.exoplayerdemo.android.core.activity.AppActivity
 import com.exoplayerdemo.android.databinding.ActivityMainBinding
-import com.google.android.material.snackbar.Snackbar
+import com.exoplayerdemo.android.util.SpaceItemDecoration
 import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.activity_main.*
+import org.jetbrains.anko.dimen
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
 import javax.inject.Inject
@@ -41,10 +43,22 @@ class MainActivity : AppActivity<MainViewModel, ActivityMainBinding>() {
 
         getAllVideos()
 
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }
+        recyclerView.layoutManager = LinearLayoutManager(getContext())
+        recyclerView.addItemDecoration(SpaceItemDecoration(dimen(R.dimen.fab_margin), true))
+        recyclerView.setHasFixedSize(true)
+
+        viewModel.videosLiveData.observe(getActivity(), Observer { videosList ->
+            Logger.d(videosList.toString())
+            val adapter = VideoAdapter(getContext(), videosList.toMutableList()) {
+
+            }
+            recyclerView.adapter = adapter
+        })
+
+        viewModel.showLoader.observe(getActivity(), Observer {
+            if (it != null && it) showLoader()
+            else hideLoader()
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -72,24 +86,7 @@ class MainActivity : AppActivity<MainViewModel, ActivityMainBinding>() {
     private fun getAllVideos() {
         val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
         if (EasyPermissions.hasPermissions(getContext(), *permissions)) {
-            val videoItemHashSet = HashSet<String>()
-            val uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI
-            val projection = arrayOf(MediaStore.Video.VideoColumns.DATA, MediaStore.Video.Media.DISPLAY_NAME)
-            //val orderBy = MediaStore.Video.Media.DATE_TAKEN
-            val cursor = getContext().contentResolver.query(uri, projection, null, null, /*"$orderBy DESC"*/null)
-            try {
-                cursor!!.moveToFirst()
-                do {
-                    videoItemHashSet.add(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA)))
-                } while (cursor.moveToNext())
-
-                cursor.close()
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-
-            //return ArrayList(videoItemHashSet)
-            Logger.d(videoItemHashSet.toString())
+            viewModel.getAllVideos()
         } else {
             EasyPermissions.requestPermissions(getActivity(), getString(R.string.storage_rational), REQUEST_CODE_STORAGE_PERMISSION, *permissions)
         }

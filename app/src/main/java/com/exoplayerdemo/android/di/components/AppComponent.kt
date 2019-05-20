@@ -4,7 +4,7 @@ import android.app.Application
 import com.exoplayerdemo.android.core.App
 import com.exoplayerdemo.android.di.builders.ActivityBuilder
 import com.exoplayerdemo.android.di.modules.AppModule
-import com.exoplayerdemo.android.di.modules.RemoteSourceModule
+import com.exoplayerdemo.android.di.modules.DataSourceModule
 import com.exoplayerdemo.android.di.modules.RepositoryModule
 import com.exoplayerdemo.android.di.modules.ViewModelModule
 import dagger.BindsInstance
@@ -24,7 +24,7 @@ import javax.inject.Singleton
         ActivityBuilder::class,
         ViewModelModule::class,
         RepositoryModule::class,
-        RemoteSourceModule::class]
+        DataSourceModule::class]
 )
 interface AppComponent {
 

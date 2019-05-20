@@ -1,5 +1,8 @@
 package com.exoplayerdemo.android.di.modules
 
+import com.exoplayerdemo.android.data.repository.MediaRepository
+import com.exoplayerdemo.android.data.repository.MediaRepositoryImpl
+import dagger.Binds
 import dagger.Module
 
 /**
@@ -9,18 +12,6 @@ import dagger.Module
 @Module
 abstract class RepositoryModule {
 
-    /*@Binds
-    abstract fun bindAuthRepository(authRepositoryImpl: AuthRepositoryImpl): AuthRepository
-
     @Binds
-    abstract fun bindTasksRepository(authRepositoryImpl: TasksRepositoryImpl): TasksRepository
-
-    @Binds
-    abstract fun bindMeasurementsRepository(measurementsRepositoryImpl: MeasurementsRepositoryImpl): MeasurementsRepository
-
-    @Binds
-    abstract fun bindJournalRepository(journalRepositoryImpl: JournalRepositoryImpl): JournalRepository
-
-    @Binds
-    abstract fun bindDeviceRepository(deviceRepositoryImpl: DeviceRepositoryImpl): DeviceRepository*/
+    abstract fun bindMediaRepositoryImpl(mediaRepositoryImpl: MediaRepositoryImpl): MediaRepository
 }
