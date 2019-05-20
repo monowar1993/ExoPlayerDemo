@@ -2,10 +2,7 @@ package com.exoplayerdemo.android.core.exoplayer
 
 import android.content.Context
 import android.net.Uri
-import com.google.android.exoplayer2.DefaultLoadControl
-import com.google.android.exoplayer2.DefaultRenderersFactory
-import com.google.android.exoplayer2.ExoPlayerFactory
-import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.source.ExtractorMediaSource
 import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
@@ -19,6 +16,11 @@ import com.google.android.exoplayer2.util.Util
  * Brain Station 23.
  */
 class AppPlayerImpl : AppPLayer {
+
+    companion object {
+        private const val DEFAULT_FAST_FORWARD_MS = 5000
+        private const val DEFAULT_REWIND_MS = 5000
+    }
 
     private var player: SimpleExoPlayer? = null
 
@@ -46,15 +48,16 @@ class AppPlayerImpl : AppPLayer {
     }
 
     override fun forward() {
-        player?.seekTo(player?.currentPosition ?: 0 + 5000)
+        val durationMs = player?.duration ?: 0L
+        var seekPositionMs = (player?.currentPosition ?: 0L) + DEFAULT_FAST_FORWARD_MS
+        if (durationMs != C.TIME_UNSET) {
+            seekPositionMs = Math.min(seekPositionMs, durationMs)
+        }
+        player?.seekTo(seekPositionMs)
     }
 
     override fun rewind() {
-        if (player?.currentPosition ?: 0 < 5000) {
-            player?.seekTo(player?.currentPosition ?: 0 - 5000)
-        } else {
-            player?.seekToDefaultPosition()
-        }
+        player?.seekTo(Math.max((player?.currentPosition ?: 0L) - DEFAULT_REWIND_MS, 0L))
     }
 
     override fun getCurrentPosition(): Long = player?.currentPosition ?: 0
@@ -68,6 +71,14 @@ class AppPlayerImpl : AppPLayer {
             player?.release()
             player = null
         }
+    }
+
+    override fun addListener(defaultEventListener: Player.EventListener) {
+        player?.addListener(defaultEventListener)
+    }
+
+    override fun removeListener(defaultEventListener: Player.EventListener) {
+        player?.removeListener(defaultEventListener)
     }
 
     private fun buildMediaSource(context: Context, uri: Uri): MediaSource {

@@ -2,6 +2,7 @@ package com.exoplayerdemo.android.core.exoplayer
 
 import android.content.Context
 import android.net.Uri
+import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 
 /**
@@ -17,4 +18,6 @@ interface AppPLayer {
     fun getCurrentPosition(): Long
     fun getPlayWhenReady(): Boolean
     fun releasePlayer()
+    fun addListener(defaultEventListener: Player.EventListener)
+    fun removeListener(defaultEventListener: Player.EventListener)
 }

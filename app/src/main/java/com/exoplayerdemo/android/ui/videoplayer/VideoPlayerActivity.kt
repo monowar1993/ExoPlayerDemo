@@ -8,10 +8,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.exoplayerdemo.android.R
 import com.exoplayerdemo.android.core.base.activity.AppActivity
+import com.exoplayerdemo.android.core.exoplayer.AppPLayer
 import com.exoplayerdemo.android.core.exoplayer.AppPlayerImpl
 import com.exoplayerdemo.android.databinding.ActivityVideoPlayerBinding
+import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.util.Util
+import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.activity_video_player.*
+import org.jetbrains.anko.sdk27.coroutines.onClick
 import javax.inject.Inject
 
 /**
@@ -29,7 +33,20 @@ class VideoPlayerActivity : AppActivity<VideoPlayerViewModel, ActivityVideoPlaye
     @Inject
     lateinit var factory: ViewModelProvider.Factory
 
-    private val appPlayer by lazy { AppPlayerImpl() }
+    private val appPlayer: AppPLayer by lazy { AppPlayerImpl() }
+    private val playerStateChangeListener = object : Player.EventListener {
+        override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
+            val stateString: String
+            when (playbackState) {
+                Player.STATE_IDLE -> stateString = "ExoPlayer.STATE_IDLE"
+                Player.STATE_BUFFERING -> stateString = "ExoPlayer.STATE_BUFFERING"
+                Player.STATE_READY -> stateString = "ExoPlayer.STATE_READY"
+                Player.STATE_ENDED -> stateString = "ExoPlayer.STATE_ENDED"
+                else -> stateString = "UNKNOWN_STATE"
+            }
+            Logger.d("changed state to $stateString playWhenReady: $playWhenReady PlayWhenReady: " + appPlayer.getPlayWhenReady())
+        }
+    }
 
     private lateinit var videoPath: String
 
@@ -46,6 +63,22 @@ class VideoPlayerActivity : AppActivity<VideoPlayerViewModel, ActivityVideoPlaye
         super.onCreate(savedInstanceState)
 
         videoPath = intent.getStringExtra(EXTRA_VIDEO_VIDEO_PATH)
+
+        btnPlay.onClick {
+            if (appPlayer.getPlayWhenReady()) {
+                appPlayer.playPause(false)
+                viewModel.playerIsPlaying = false
+                btnPlay.setImageResource(R.drawable.exo_controls_play)
+            } else {
+                appPlayer.playPause(true)
+                viewModel.playerIsPlaying = true
+                btnPlay.setImageResource(R.drawable.exo_controls_pause)
+            }
+        }
+
+        btnForward.onClick { appPlayer.forward() }
+
+        btnRewind.onClick { appPlayer.rewind() }
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -62,6 +95,12 @@ class VideoPlayerActivity : AppActivity<VideoPlayerViewModel, ActivityVideoPlaye
         if (Util.SDK_INT > 23) {
             playerView.player = appPlayer.initializePlayer(getContext())
             appPlayer.play(getContext(), Uri.parse(videoPath), viewModel.playerIsPlaying, viewModel.playerCurrentPosition)
+            appPlayer.addListener(playerStateChangeListener)
+            if (appPlayer.getPlayWhenReady()) {
+                btnPlay.setImageResource(R.drawable.exo_controls_pause)
+            } else {
+                btnPlay.setImageResource(R.drawable.exo_controls_play)
+            }
         }
     }
 
@@ -70,6 +109,12 @@ class VideoPlayerActivity : AppActivity<VideoPlayerViewModel, ActivityVideoPlaye
         if (Util.SDK_INT <= 23) {
             playerView.player = appPlayer.initializePlayer(getContext())
             appPlayer.play(getContext(), Uri.parse(videoPath), viewModel.playerIsPlaying, viewModel.playerCurrentPosition)
+            appPlayer.addListener(playerStateChangeListener)
+            if (appPlayer.getPlayWhenReady()) {
+                btnPlay.setImageResource(R.drawable.exo_controls_pause)
+            } else {
+                btnPlay.setImageResource(R.drawable.exo_controls_play)
+            }
         }
     }
 
@@ -78,6 +123,7 @@ class VideoPlayerActivity : AppActivity<VideoPlayerViewModel, ActivityVideoPlaye
         if (Util.SDK_INT <= 23) {
             viewModel.playerIsPlaying = appPlayer.getPlayWhenReady()
             viewModel.playerCurrentPosition = appPlayer.getCurrentPosition()
+            appPlayer.removeListener(playerStateChangeListener)
             appPlayer.releasePlayer()
         }
     }
@@ -87,6 +133,7 @@ class VideoPlayerActivity : AppActivity<VideoPlayerViewModel, ActivityVideoPlaye
         if (Util.SDK_INT > 23) {
             viewModel.playerIsPlaying = appPlayer.getPlayWhenReady()
             viewModel.playerCurrentPosition = appPlayer.getCurrentPosition()
+            appPlayer.removeListener(playerStateChangeListener)
             appPlayer.releasePlayer()
         }
     }
