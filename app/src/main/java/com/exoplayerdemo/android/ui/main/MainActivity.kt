@@ -14,7 +14,6 @@ import com.exoplayerdemo.android.core.base.activity.AppActivity
 import com.exoplayerdemo.android.databinding.ActivityMainBinding
 import com.exoplayerdemo.android.ui.videoplayer.VideoPlayerActivity
 import com.exoplayerdemo.android.util.SpaceItemDecoration
-import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.dimen
 import pub.devrel.easypermissions.AfterPermissionGranted
@@ -50,7 +49,6 @@ class MainActivity : AppActivity<MainViewModel, ActivityMainBinding>() {
         recyclerView.setHasFixedSize(true)
 
         viewModel.videosLiveData.observe(getActivity(), Observer { videosList ->
-            Logger.d(videosList.toString())
             val adapter = VideoAdapter(getContext(), videosList.toMutableList())
             recyclerView.adapter = adapter
             adapter.setOnItemClickListener { position ->

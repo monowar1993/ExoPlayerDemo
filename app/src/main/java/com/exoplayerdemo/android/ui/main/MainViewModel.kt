@@ -18,16 +18,16 @@ class MainViewModel @Inject constructor(private val repository: MediaRepository)
 
     fun getAllVideos() {
         compositeDisposable.add(
-                repository.getAllVideos()
-                        .doOnSubscribe { showLoader.postValue(true) }
-                        .doAfterTerminate { showLoader.postValue(false) }
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe({ videosList ->
-                            videosLiveData.postValue(videosList)
-                        }, { throwable ->
-                            throwable.printStackTrace()
-                        })
+            repository.getAllVideos()
+                .doOnSubscribe { showLoader.postValue(true) }
+                .doAfterTerminate { showLoader.postValue(false) }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ videosList ->
+                    videosLiveData.postValue(videosList)
+                }, { throwable ->
+                    throwable.printStackTrace()
+                })
         )
     }
 }

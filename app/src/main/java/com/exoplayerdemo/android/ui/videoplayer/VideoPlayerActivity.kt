@@ -105,49 +105,47 @@ class VideoPlayerActivity : AppActivity<VideoPlayerViewModel, ActivityVideoPlaye
     override fun onStart() {
         super.onStart()
         if (Util.SDK_INT > 23) {
-            playerView.player = appPlayer.initializePlayer(getContext())
-            appPlayer.play(getContext(), Uri.parse(videoPath), viewModel.playerIsPlaying, viewModel.playerCurrentPosition)
-            appPlayer.addListener(playerStateChangeListener)
-            if (appPlayer.getPlayWhenReady()) {
-                btnPlay.setImageResource(R.drawable.exo_controls_pause)
-            } else {
-                btnPlay.setImageResource(R.drawable.exo_controls_play)
-            }
+            startPlayer()
         }
     }
 
     override fun onResume() {
         super.onResume()
         if (Util.SDK_INT <= 23) {
-            playerView.player = appPlayer.initializePlayer(getContext())
-            appPlayer.play(getContext(), Uri.parse(videoPath), viewModel.playerIsPlaying, viewModel.playerCurrentPosition)
-            appPlayer.addListener(playerStateChangeListener)
-            if (appPlayer.getPlayWhenReady()) {
-                btnPlay.setImageResource(R.drawable.exo_controls_pause)
-            } else {
-                btnPlay.setImageResource(R.drawable.exo_controls_play)
-            }
+            startPlayer()
         }
     }
 
     override fun onPause() {
         super.onPause()
         if (Util.SDK_INT <= 23) {
-            viewModel.playerIsPlaying = appPlayer.getPlayWhenReady()
-            viewModel.playerCurrentPosition = appPlayer.getCurrentPosition()
-            appPlayer.removeListener(playerStateChangeListener)
-            appPlayer.releasePlayer()
+            stopPlayer()
         }
     }
 
     override fun onStop() {
         super.onStop()
         if (Util.SDK_INT > 23) {
-            viewModel.playerIsPlaying = appPlayer.getPlayWhenReady()
-            viewModel.playerCurrentPosition = appPlayer.getCurrentPosition()
-            appPlayer.removeListener(playerStateChangeListener)
-            appPlayer.releasePlayer()
+            stopPlayer()
         }
+    }
+
+    private fun startPlayer() {
+        playerView.player = appPlayer.initializePlayer(getContext())
+        appPlayer.play(getContext(), Uri.parse(videoPath), viewModel.playerIsPlaying, viewModel.playerCurrentPosition)
+        appPlayer.addListener(playerStateChangeListener)
+        if (appPlayer.getPlayWhenReady()) {
+            btnPlay.setImageResource(R.drawable.exo_controls_pause)
+        } else {
+            btnPlay.setImageResource(R.drawable.exo_controls_play)
+        }
+    }
+
+    private fun stopPlayer() {
+        viewModel.playerIsPlaying = appPlayer.getPlayWhenReady()
+        viewModel.playerCurrentPosition = appPlayer.getCurrentPosition()
+        appPlayer.removeListener(playerStateChangeListener)
+        appPlayer.releasePlayer()
     }
 
     private fun hideSystemUi() {
