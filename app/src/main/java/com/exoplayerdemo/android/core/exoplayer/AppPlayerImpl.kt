@@ -38,9 +38,11 @@ class AppPlayerImpl : AppPLayer {
     }
 
     override fun play(context: Context, uri: Uri, playWhenReady: Boolean, playbackPosition: Long) {
-        player?.prepare(buildMediaSource(context, uri), true, false)
-        player?.playWhenReady = playWhenReady
-        player?.seekTo(playbackPosition)
+        player?.let { player ->
+            player.prepare(buildMediaSource(context, uri), true, false)
+            player.playWhenReady = playWhenReady
+            player.seekTo(playbackPosition)
+        }
     }
 
     override fun playPause(play: Boolean) {
@@ -48,16 +50,20 @@ class AppPlayerImpl : AppPLayer {
     }
 
     override fun forward() {
-        val durationMs = player?.duration ?: 0L
-        var seekPositionMs = (player?.currentPosition ?: 0L) + DEFAULT_FAST_FORWARD_MS
-        if (durationMs != C.TIME_UNSET) {
-            seekPositionMs = Math.min(seekPositionMs, durationMs)
+        player?.let { player ->
+            val durationMs = player.duration
+            var seekPositionMs = player.currentPosition + DEFAULT_FAST_FORWARD_MS
+            if (durationMs != C.TIME_UNSET) {
+                seekPositionMs = Math.min(seekPositionMs, durationMs)
+            }
+            player.seekTo(seekPositionMs)
         }
-        player?.seekTo(seekPositionMs)
     }
 
     override fun rewind() {
-        player?.seekTo(Math.max((player?.currentPosition ?: 0L) - DEFAULT_REWIND_MS, 0L))
+        player?.let { player ->
+            player.seekTo(Math.max(player.currentPosition - DEFAULT_REWIND_MS, 0L))
+        }
     }
 
     override fun getCurrentPosition(): Long = player?.currentPosition ?: 0
@@ -68,7 +74,7 @@ class AppPlayerImpl : AppPLayer {
 
     override fun releasePlayer() {
         if (player != null) {
-            player?.release()
+            player!!.release()
             player = null
         }
     }
