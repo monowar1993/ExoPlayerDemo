@@ -41,7 +41,11 @@ class VideoPlayerActivity : AppActivity<VideoPlayerViewModel, ActivityVideoPlaye
                 Player.STATE_IDLE -> stateString = "ExoPlayer.STATE_IDLE"
                 Player.STATE_BUFFERING -> stateString = "ExoPlayer.STATE_BUFFERING"
                 Player.STATE_READY -> stateString = "ExoPlayer.STATE_READY"
-                Player.STATE_ENDED -> stateString = "ExoPlayer.STATE_ENDED"
+                Player.STATE_ENDED -> {
+                    stateString = "ExoPlayer.STATE_ENDED"
+                    viewModel.playerFinishedPlaying = true
+                    btnPlay.setImageResource(R.drawable.exo_controls_play)
+                }
                 else -> stateString = "UNKNOWN_STATE"
             }
             Logger.d("changed state to $stateString playWhenReady: $playWhenReady PlayWhenReady: " + appPlayer.getPlayWhenReady())
@@ -65,13 +69,21 @@ class VideoPlayerActivity : AppActivity<VideoPlayerViewModel, ActivityVideoPlaye
         videoPath = intent.getStringExtra(EXTRA_VIDEO_VIDEO_PATH)
 
         btnPlay.onClick {
-            if (appPlayer.getPlayWhenReady()) {
-                appPlayer.playPause(false)
-                viewModel.playerIsPlaying = false
-                btnPlay.setImageResource(R.drawable.exo_controls_play)
+            if (!viewModel.playerFinishedPlaying) {
+                if (appPlayer.getPlayWhenReady()) {
+                    appPlayer.playPause(false)
+                    viewModel.playerIsPlaying = false
+                    btnPlay.setImageResource(R.drawable.exo_controls_play)
+                } else {
+                    appPlayer.playPause(true)
+                    viewModel.playerIsPlaying = true
+                    btnPlay.setImageResource(R.drawable.exo_controls_pause)
+                }
             } else {
-                appPlayer.playPause(true)
+                viewModel.playerFinishedPlaying = false
                 viewModel.playerIsPlaying = true
+                viewModel.playerCurrentPosition = 0
+                appPlayer.play(getContext(), Uri.parse(videoPath), viewModel.playerIsPlaying, viewModel.playerCurrentPosition)
                 btnPlay.setImageResource(R.drawable.exo_controls_pause)
             }
         }

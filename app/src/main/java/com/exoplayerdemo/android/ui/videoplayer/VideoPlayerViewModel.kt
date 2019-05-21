@@ -8,6 +8,7 @@ import javax.inject.Inject
  * Brain Station 23.
  */
 class VideoPlayerViewModel @Inject constructor(): AppViewModel() {
+    var playerFinishedPlaying = false
     var playerIsPlaying = true
     var playerCurrentPosition = 0L
 }
