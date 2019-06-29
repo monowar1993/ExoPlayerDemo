@@ -26,6 +26,7 @@
             app:repeat_toggle_modes="all"
             app:use_controller="false" />
 
+        <!--This layout is here. Make it visible. It is a demo for custom control-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_gravity="bottom"
     android:background="#11000000"
     android:layoutDirection="ltr"
@@ -15,37 +15,45 @@
         android:orientation="horizontal"
         android:paddingTop="4dp">
 
-        <ImageButton
+        <androidx.appcompat.widget.AppCompatImageButton
             android:id="@id/exo_prev"
-            style="@style/ExoMediaButton.Previous" />
+            style="@style/ExoMediaButton.Previous"
+            android:layout_weight="1" />
 
-        <ImageButton
+        <androidx.appcompat.widget.AppCompatImageButton
             android:id="@id/exo_rew"
-            style="@style/ExoMediaButton.Rewind" />
+            style="@style/ExoMediaButton.Rewind"
+            android:layout_weight="1" />
 
-        <ImageButton
+        <androidx.appcompat.widget.AppCompatImageButton
             android:id="@id/exo_shuffle"
-            style="@style/ExoMediaButton.Shuffle" />
+            style="@style/ExoMediaButton.Shuffle"
+            android:layout_weight="1" />
 
-        <ImageButton
+        <androidx.appcompat.widget.AppCompatImageButton
             android:id="@id/exo_repeat_toggle"
-            style="@style/ExoMediaButton" />
+            style="@style/ExoMediaButton"
+            android:layout_weight="1" />
 
-        <ImageButton
+        <androidx.appcompat.widget.AppCompatImageButton
             android:id="@id/exo_play"
-            style="@style/ExoMediaButton.Play" />
+            style="@style/ExoMediaButton.Play"
+            android:layout_weight="1" />
 
-        <ImageButton
+        <androidx.appcompat.widget.AppCompatImageButton
             android:id="@id/exo_pause"
-            style="@style/ExoMediaButton.Pause" />
+            style="@style/ExoMediaButton.Pause"
+            android:layout_weight="1" />
 
-        <ImageButton
+        <androidx.appcompat.widget.AppCompatImageButton
             android:id="@id/exo_ffwd"
-            style="@style/ExoMediaButton.FastForward" />
+            style="@style/ExoMediaButton.FastForward"
+            android:layout_weight="1" />
 
-        <ImageButton
+        <androidx.appcompat.widget.AppCompatImageButton
             android:id="@id/exo_next"
-            style="@style/ExoMediaButton.Next" />
+            style="@style/ExoMediaButton.Next"
+            android:layout_weight="1" />
 
     </LinearLayout>
 
@@ -73,10 +81,10 @@
             android:layout_height="16dp"
             android:layout_weight="1"
             app:bar_height="1dp"
-            app:played_color="@color/colorAccent"
-            app:unplayed_color="#4DFFFFFF"
             app:buffered_color="#FFFFFFFF"
-            app:scrubber_color="@color/colorPrimaryDark"/>
+            app:played_color="@color/colorAccent"
+            app:scrubber_color="@color/colorPrimaryDark"
+            app:unplayed_color="#4DFFFFFF" />
 
         <TextView
             android:id="@id/exo_duration"

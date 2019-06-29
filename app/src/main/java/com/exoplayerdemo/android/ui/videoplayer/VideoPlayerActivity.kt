@@ -66,8 +66,9 @@ class VideoPlayerActivity : AppActivity<VideoPlayerViewModel, ActivityVideoPlaye
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        videoPath = intent.getStringExtra(EXTRA_VIDEO_VIDEO_PATH)
+        videoPath = intent.getStringExtra(EXTRA_VIDEO_VIDEO_PATH)!!
 
+        // Handle click on custom layout
         btnPlay.onClick {
             if (!viewModel.playerFinishedPlaying) {
                 if (appPlayer.getPlayWhenReady()) {
